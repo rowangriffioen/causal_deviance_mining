@@ -1,0 +1,47 @@
+---
+  # common settings
+  event_log: "BPI15A"
+  raw_log: "BPIC"
+  experiment_name: "bpi15A_decl2"
+  event_log_settings: "bpi2015_settings.cfg"
+
+  # how feature‐sets combine into named datasets
+  dataset_composition:
+    baseline_data:       [baseline, payload]
+    baseline_dwd:        [baseline, dwd]
+    declare_data:        [declare, payload]
+    declare_dwd:         [declare, dwd]
+    declare_dwd_payload: [declare, payload, dwd]
+    hybrid:              [declare, sequential_combined]
+    hybrid_data:         [declare, payload, sequential_combined]
+    hybrid_dwd:          [declare, dwd, sequential_combined]
+    hybrid_dwd_payload:  [declare, dwd, payload, sequential_combined]
+    mr_data:             [mr, payload]
+    mra_data:            [mra, payload]
+    tr_data:             [tr, payload]
+    tra_data:            [tra, payload]
+
+  # mapping from folder names back to internal keys
+  folder_to_internal:
+    sequential_combined: sequential_combined
+    baseline:            baseline
+    declare:             declare
+    payload:             payload
+    hybrid:              hybrid
+    baseline_data:       baseline_data
+    baseline_dwd:        baseline_dwd
+    mr:                  mr
+    tr:                  tr
+    mra:                 mra
+    tra:                 tra
+    declare_data:        declare_data
+    mr_data:             mr_data
+    mra_data:            mra_data
+    tr_data:             tr_data
+    tra_data:            tra_data
+    declare_dwd:         declare_dwd
+    declare_dwd_payload: declare_dwd_payload
+    hybrid_data:         hybrid_data
+    hybrid_dwd:          hybrid_dwd
+    hybrid_dwd_payload:  hybrid_dwd_payload
+    dwd:                 dwd

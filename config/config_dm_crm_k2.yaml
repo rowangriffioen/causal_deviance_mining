@@ -1,0 +1,6 @@
+---
+  # common settings
+  event_log: "traffic"
+  experiment_name: "traffic_decl3"
+  target: "Label" 
+  encoding:

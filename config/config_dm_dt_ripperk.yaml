@@ -1,0 +1,27 @@
+---
+  # common settings
+  event_log: "BPI15A"
+  experiment_name: "BPI15A_decl2"
+  target: "Label" 
+  encoding:
+
+  # Cross-validation
+  folds: 5
+  random_state: 42
+
+  # Feature selection: number of features to keep
+  select_k: 'all'
+
+  # Classifier choice and parameters
+  classifier: "dt"
+  classifier_params_ripperk: {
+      prune_size:           0.33
+  }
+
+  classifier_params_dt: {
+      max_depth:          10,
+      min_samples_leaf:   10,
+      criterion:          'entropy',
+      class_weight:       'balanced'
+  }
+

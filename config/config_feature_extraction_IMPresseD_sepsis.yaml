@@ -1,0 +1,40 @@
+---
+  # common settings
+  event_log: "sepsis"
+  raw_log: "Sepsis_Cases_Event_Log"
+  experiment_name: "sepsis_mr_tr"
+  event_log_settings: "sepsis_settings.cfg"
+
+  # how feature‐sets combine into named datasets
+  dataset_composition:
+    bs_data:             [baseline, payload]
+    bs_dwd:              [baseline, dwd]
+    seq_combined_data:   [seq_combined, payload]
+    dec_data:            [declare, payload]
+    dec_dwd:             [declare, dwd]
+    dec_dwd_data:        [declare, payload, dwd]
+    hybrid:              [declare, seq_combined]
+    hybrid_data:         [declare, payload, seq_combined]
+    hybrid_dwd:          [declare, dwd, seq_combined]
+    hybrid_dwd_data:     [declare, dwd, payload, seq_combined]
+
+  # mapping from folder names back to internal keys
+  folder_to_internal:
+    baseline:            baseline
+    payload:             payload
+    mr:                  mr
+    tr:                  tr
+    mra:                 mra
+    tra:                 tra
+    seq_combined:        seq_combined
+    declare:             declare
+    dwd:                 dwd
+    bs_data:             bs_data
+    bs_dwd:              bs_dwd
+    seq_combined_data:   seq_combined_data
+    dec_data:            dec_data
+    dec_dwd_data:        dec_dwd_data
+    hybrid:              hybrid
+    hybrid_data:         hybrid_data
+    hybrid_dwd:          hybrid_dwd
+    hybrid_dwd_data:     hybrid_dwd_data
