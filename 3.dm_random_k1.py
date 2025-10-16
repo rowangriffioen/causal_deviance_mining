@@ -1,84 +1,87 @@
 #!/usr/bin/env python3
 import os
+import sys
 import subprocess
+from pathlib import Path
 import pandas as pd
 import yaml
 from yaml.loader import SafeLoader
 
+BASE_DIR = Path(__file__).resolve().parent  # folder of this script
 
 def main():
     # Load base configuration
-    config_path = os.path.join("config", "config_dm_crm_k1.yaml")
+    config_path = BASE_DIR / "config" / "config_dm_crm_k1.yaml"
     with open(config_path) as f:
         config = yaml.load(f, Loader=SafeLoader)
 
     event_log    = config["event_log"]
     experiment   = config["experiment_name"]
-    encoding_cfg = config.get("encoding", None)
+    encoding_cfg = config.get("encoding")
 
     print("event log:", event_log)
     print("experiment:", experiment)
     print("encoding config:", encoding_cfg)
 
     # Determine encodings to process
-    base_input = os.path.join("3.2_binned_features", event_log, f"{experiment}_features")
+    base_input = BASE_DIR / "3.2_binned_features" / event_log / f"{experiment}_features"
     if encoding_cfg:
         encodings = [encoding_cfg]
     else:
-        encodings = [d for d in os.listdir(base_input) if os.path.isdir(os.path.join(base_input, d))]
+        encodings = [d.name for d in base_input.iterdir() if d.is_dir()]
 
-    # Fixed settings from config
     target_var = config["target"]
 
     for enc in encodings:
         print(f"\n=== CRM on encoding: {enc} ===")
 
-        # Paths
-        dataset_file = os.path.join("3.2_binned_features", event_log, f"{experiment}_features", enc, f"{enc}.csv")
-        out_dir = os.path.join("4_output", "random", event_log, f"{experiment}_features", "k1", enc)
-        os.makedirs(out_dir, exist_ok=True)
+        dataset_file = base_input / enc / f"{enc}.csv"
+        out_dir = BASE_DIR / "4_output" / "random" / event_log / f"{experiment}_features" / "k1" / enc
+        out_dir.mkdir(parents=True, exist_ok=True)
 
         # Read header to determine feature columns
         df_cols = pd.read_csv(dataset_file, nrows=0).columns.tolist()
         selected_vars = [c for c in df_cols if c not in ("Case_ID", "Label")]
 
-        # Build per-encoding CRM config
         crm_cfg = {
             "event_log": event_log,
             "experiment_name": experiment,
             "encoding": enc,
-            "dataset_file": dataset_file,
+            "dataset_file": str(dataset_file),
             "name": f"{enc}_k1",
             "selected variables": selected_vars,
             "controllable variables": selected_vars.copy(),
-            "nominal variables": [],          # none by default
+            "nominal variables": [],
             "target": target_var,
         }
-        tmp_cfg = f"temp_crm_random_{experiment}_{enc}_k1.yaml"
-        with open(tmp_cfg, "w") as tf:
-            yaml.dump(crm_cfg, tf)
+        tmp_cfg = BASE_DIR / f"temp_crm_random_{experiment}_{enc}_k1.yaml"
+        tmp_cfg.write_text(yaml.dump(crm_cfg))
 
-        # Execute discovery script; on success move artifacts; always clean temp config
         try:
-            subprocess.run(["python", "models/CRM_random_k1.py", tmp_cfg], check=True)
+            # run in the project folder so relative paths inside the model script work
+            subprocess.run(
+                [sys.executable, "models/CRM_random_k1.py", str(tmp_cfg.name)],
+                check=True,
+                cwd=BASE_DIR,  # important!
+            )
 
             generated = f"rules_random_{enc}_k1_{target_var}.csv"
             timing    = f"seconds_runtime_random_{experiment}_{enc}_k1.txt"
 
-            os.replace(generated, os.path.join(out_dir, generated))
-            os.replace(timing,    os.path.join(out_dir, timing))
+            os.replace(BASE_DIR / generated, out_dir / generated)
+            os.replace(BASE_DIR / timing,    out_dir / timing)
 
-            print(f" → Causal-rule CSV moved to: {out_dir}/{generated}")
-            print(f" → Time TXT moved to: {out_dir}/{timing}")
+            print(f" → Causal-rule CSV moved to: {out_dir / generated}")
+            print(f" → Time TXT moved to: {out_dir / timing}")
 
         except subprocess.CalledProcessError as e:
             print(f" ⚠️  CRM script failed for encoding {enc} (exit code {e.returncode}). Skipping.")
         except FileNotFoundError as e:
             print(f" ⚠️  File operation failed for encoding {enc}: {e}. Skipping.")
         finally:
-            if os.path.exists(tmp_cfg):
-                os.remove(tmp_cfg)
-
+            if tmp_cfg.exists():
+                tmp_cfg.unlink()
 
 if __name__ == "__main__":
     main()
+

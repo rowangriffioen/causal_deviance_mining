@@ -6,7 +6,7 @@ import yaml
 import sys
 import time
 import multiprocessing
-
+from pathlib import Path
 
 # prefix tree
 class Node:
@@ -698,7 +698,11 @@ if __name__ == "__main__":
             nominal_variables=config['nominal variables']
             target = config['target']
 
-    df =pd.read_csv(r"./%s" % file,sep=",", index_col='Case_ID')
+    p = Path(file)
+    if not p.is_absolute():
+        p = Path.cwd() / p
+    p = p.resolve()
+    df = pd.read_csv(p, sep=",", index_col="Case_ID")
     print(df)
     data = pd.DataFrame()
     data['Z'] = df[target]

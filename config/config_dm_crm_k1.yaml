@@ -1,6 +1,6 @@
 ---
   # common settings
-  event_log: "traffic"
-  experiment_name: "traffic_decl3"
+  event_log: "sepsis"
+  experiment_name: "sepsis_mr_tr"
   target: "Label" 
   encoding:

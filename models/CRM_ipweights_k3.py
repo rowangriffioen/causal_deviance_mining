@@ -4,6 +4,7 @@ import math
 import re
 import yaml
 import sys
+from pathlib import Path
 
 # prefix tree
 class Node:
@@ -548,7 +549,11 @@ else:
         target = config['target']
 
 
-df =pd.read_csv(r"./%s" % file,sep=",", index_col='Case_ID')
+p = Path(file)
+if not p.is_absolute():
+    p = Path.cwd() / p
+p = p.resolve()
+df = pd.read_csv(p, sep=",", index_col="Case_ID")
 print(df)
 data = pd.DataFrame()
 data['Z'] = df[target]

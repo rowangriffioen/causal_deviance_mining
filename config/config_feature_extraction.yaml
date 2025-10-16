@@ -1,7 +1,7 @@
 ---
   # common settings
   event_log: "sepsis"
-  raw_log: "Sepsis_Cases_Event_Log"
+  raw_log: "Sepsis_Cases_Event_Log.xes"
   experiment_name: "sepsis_mr_tr"
   event_log_settings: "sepsis_settings.cfg"
 

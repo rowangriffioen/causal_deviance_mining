@@ -62,7 +62,7 @@ def main():
         try:
             subprocess.run(["python", "models/CRM_ipweights_k3.py", tmp_cfg], check=True)
 
-            generated = f"rules_ipweights_{enc}_k3_{target_var}.csv"
+            generated = f"rules_{enc}_k3_{target_var}.csv"
             timing    = f"seconds_runtime_ipweights_{experiment}_{enc}_k3.txt"
 
             os.replace(generated, os.path.join(out_dir, generated))
