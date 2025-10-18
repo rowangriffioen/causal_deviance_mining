@@ -8,6 +8,10 @@ This repository contains the full implementation developed for the master’s th
 The project integrates **Causal Rule Mining (CRM)** into a **multi-perspective Business Process Deviance Mining (DM)** pipeline to discover interpretable, causally grounded explanations of process deviations.  
 It builds upon and extends the deviance mining framework of Bergami et al. (2021), introducing causal reasoning (Eshuis & Genga, 2025), enhanced feature extraction via **IMPresseD**, and sampling stability through **Inverse Propensity Weighting (IPW)**.
 
+📦 **Public Datasets**  
+The event logs and feature datasets used in this research are openly available on Zenodo:  
+👉 [https://zenodo.org/uploads/17370765](https://zenodo.org/uploads/17370765)
+
 ---
 
 ## 📘 **Overview**
