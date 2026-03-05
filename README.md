@@ -10,7 +10,7 @@ It builds upon and extends the deviance mining framework of Bergami et al. (2021
 
 📦 **Public Datasets**  
 The event logs and feature datasets used in this research are openly available on Zenodo:  
-👉 [https://zenodo.org/uploads/17370765](https://zenodo.org/uploads/17370765)
+👉 [https://zenodo.org/records/18864747](https://zenodo.org/records/18864747)
 
 ---
 
